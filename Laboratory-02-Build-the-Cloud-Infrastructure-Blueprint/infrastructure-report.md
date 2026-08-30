@@ -45,3 +45,23 @@
 ## Summary
 
 The KillerCoda environment is running Ubuntu 24.04.4 LTS on a 64-bit x86_64 architecture. It uses a single virtual Intel Xeon CPU with KVM full virtualization. The environment has 1.9 GiB of memory and a 19 GB main filesystem. This demonstrates how a Linux virtual machine can provide compute, memory, storage, and operating system resources for a cloud-based infrastructure environment.
+
+## Network and System Information
+
+- Hostname: ubuntu
+- Primary Network Interface: enp1s0
+- IP Address: 172.30.1.2/24
+- Loopback Address: 127.0.0.1
+- Docker Network: 172.17.0.1/16
+
+## Mounted File Systems and Storage
+
+- Main Filesystem: /dev/vda1
+- Total Capacity: 19 GB
+- Used Space: 5.4 GB
+- Available Space: 13 GB
+- Usage: 30%
+- Mount Point: /
+- Boot Filesystem: /dev/vda16
+- EFI Filesystem: /dev/vda15
+
