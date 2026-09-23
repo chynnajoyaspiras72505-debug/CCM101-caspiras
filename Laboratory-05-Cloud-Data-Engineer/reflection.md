@@ -1,25 +1,11 @@
 # Reflection
 
-## What I Learned
+Object storage is a better option for storing millions of photos than traditional block storage because it is designed to handle large amounts of unstructured data such as images, videos, and backups. Instead of organizing data into fixed-size blocks, object storage keeps each photo as an individual object together with its metadata and unique identifier. This makes the data easier to organize, retrieve, and scale as the number of photos increases.
 
-In this laboratory, I learned how cloud data can be stored using different storage models such as object, block, and file storage. I understood that each storage type is designed for different purposes and workloads.
+Using Docker made deploying the MinIO storage server easier because I did not have to manually install and configure all of MinIO's dependencies. I was able to obtain the MinIO container image, start the service using a Docker command, expose the required ports, and access the MinIO web console. This showed me how containers can simplify the deployment of cloud services and provide a consistent environment.
 
-I also learned how object storage works through MinIO. Unlike traditional file storage, object storage manages data as objects inside buckets, making it suitable for images, backups, application files, and other unstructured data.
+A bucket in cloud storage is a container used to organize and store objects. During this laboratory activity, I created a bucket named `client-photos` in MinIO and uploaded a file to it. This helped me understand how object storage groups and manages data without using the traditional folder structure of a local file system.
 
-## Experience with Docker and MinIO
+Large enterprise companies can prevent object storage data from being lost if physical servers crash by using redundancy and replication across multiple servers or locations. They can also use backups and distributed storage so that copies of their data remain available even when a server or storage device fails.
 
-Deploying MinIO using Docker helped me understand how containers can be used to quickly deploy cloud-native services. I learned how to pull a container image, start a container, expose ports, and verify that the container is running.
-
-During the activity, the original MinIO image reference did not work, so I used the MinIO image from Quay.io. After successfully starting the container, I accessed the MinIO web console through port 9001.
-
-## Object Storage Activity
-
-I created a bucket named `client-photos` and uploaded `minio-deployed.png`. Seeing the file successfully uploaded helped me understand the basic process of storing objects in a cloud object storage system.
-
-## Challenges Encountered
-
-One challenge was accessing and deploying MinIO correctly in the laboratory environment. I encountered an image pull error and temporary KillerCoda connection interruptions. These challenges required checking the Docker image, container status, and exposed ports.
-
-## Conclusion
-
-This laboratory gave me practical experience with cloud storage, Docker, and MinIO. It helped me understand how a Cloud Data Engineer can use object storage technologies to organize and manage data in a scalable cloud environment.
+My confidence in navigating the Linux command line is growing because this laboratory required me to use terminal commands for Docker, Git, and file management. I encountered some problems while deploying MinIO, but troubleshooting the container, checking commands, and completing the activity helped me become more comfortable working in a Linux environment.
