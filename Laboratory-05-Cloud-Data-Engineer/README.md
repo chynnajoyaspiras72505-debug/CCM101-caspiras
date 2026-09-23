@@ -1,8 +1,8 @@
 # Laboratory 05 - Cloud Data Engineer
 
-## Overview
+## Mission Overview
 
-This laboratory focuses on the role of a Cloud Data Engineer and the use of cloud storage technologies. The activity explores different storage types and demonstrates the deployment of MinIO, an object storage platform.
+This laboratory focuses on the role of a Cloud Data Engineer and the use of cloud storage technologies. The activity explores different types of cloud storage and demonstrates the deployment of MinIO as an object storage platform.
 
 ## Objectives
 
@@ -13,17 +13,21 @@ This laboratory focuses on the role of a Cloud Data Engineer and the use of clou
 - Upload an object to the MinIO bucket.
 - Document the deployment process and observations.
 
-## Laboratory Files
+## Tools Used
 
-- `storage-types-research.md` - Research and comparison of cloud storage types.
-- `minio-deployment.md` - Documentation of the MinIO deployment.
-- `reflection.md` - Reflection and lessons learned from the laboratory.
-- `screenshots/` - Screenshots showing the laboratory implementation.
+- Ubuntu Linux
+- Docker
+- MinIO
+- Git
+- GitHub
+- Markdown
 
-## MinIO Deployment
+## Skills Learned
 
-MinIO was deployed using Docker and accessed through its web console. A bucket named `client-photos` was created successfully, and a sample file was uploaded to verify that the object storage service was working.
-
-## Status
-
-Laboratory 05 completed successfully.
+- Understanding object, block, and file storage.
+- Deploying an object storage service using Docker.
+- Working with Docker ports and environment variables.
+- Creating buckets and uploading objects in MinIO.
+- Using Linux command-line tools.
+- Documenting laboratory activities using Markdown.
+- Managing laboratory files using Git and GitHub.
