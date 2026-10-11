@@ -12,6 +12,14 @@ This mission focuses on monitoring a containerized web application and using ope
 - Document system performance and observability data using Markdown.
 - Continue expanding a professional GitHub Cloud Computing portfolio.
 
+## Skills Learned
+- Establishing a baseline for Linux host resources. 
+- Deploying and testing an Nginx container with Docker.
+- Generating HTTP traffic and intentionally testing a 404 error.
+- Reading Docker application logs for troubleshooting.
+- Monitoring container CPU and memory usage.
+- Using Markdown to document cloud operations and observability results.
+
 ## Monitoring Commands Executed
 
 ```bash
@@ -26,11 +34,5 @@ curl http://localhost:8080/hidden-admin-page
 docker logs client-website
 docker stats --no-stream
 
-## Skills Learned
-Establishing a baseline for Linux host resources.
-Deploying and testing an Nginx container with Docker.
-Generating HTTP traffic and intentionally testing a 404 error.
-Reading Docker application logs for troubleshooting.
-Monitoring container CPU and memory usage.
-Using Markdown to document cloud operations and observability results.
+
 
