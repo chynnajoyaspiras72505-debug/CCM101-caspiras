@@ -14,6 +14,7 @@ This mission focuses on securing a Linux server using a host-based firewall. The
 
 ## Commands Executed
 
+```bash
 sudo ufw allow ssh
 sudo ufw default deny incoming
 sudo ufw default allow outgoing
