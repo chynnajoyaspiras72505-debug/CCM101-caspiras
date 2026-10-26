@@ -1,254 +1,268 @@
-# CloudNova Technologies — Enterprise Cloud Architect
+# Operational Manual
+## CloudNova Technologies — Enterprise Cloud Architect
+
+**Course:** CCM101 – Cloud Computing  
+**Laboratory Activity:** Mission 10  
+**Project:** Nextcloud File Sharing System
+
+---
 
 ## 1. System Overview
 
-CloudNova is a cloud infrastructure project that uses Ubuntu Server, Docker, Nextcloud, MariaDB, UFW, Bash, and Cron.
+CloudNova is a file-sharing system hosted on Ubuntu Server using Oracle VirtualBox. The system uses Docker Compose to run Nextcloud and MariaDB, with persistent storage, firewall protection, and automated database backups.
 
-The system is hosted inside an Ubuntu Server virtual machine running on Oracle VM VirtualBox. Nextcloud provides the file-sharing application, while MariaDB stores the application database.
+### System Specifications
 
-## 2. Host Machine
-
-| Configuration | Details |
+| Component | Configuration |
 |---|---|
 | Host Machine | ASUS TUF Gaming A15 |
 | Host OS | Windows 11 Home Single Language |
 | Host RAM | 8 GB |
 | Hypervisor | Oracle VM VirtualBox |
-
-## 3. Ubuntu Server Configuration
-
-| Configuration | Details |
-|---|---|
-| Operating System | Ubuntu Server 24.04.5 LTS |
+| Virtual Machine | Ubuntu Server 24.04.5 LTS |
 | Hostname | cloudnova |
 | Username | cloudadmin |
-| vCPU | 3 |
-| RAM | 2304 MB |
-| Disk | 25 GB |
+| VM Resources | 3 vCPUs, 2304 MB RAM, 25 GB disk |
 | Network Mode | Bridged Adapter |
 | Server IP | 192.168.1.78 |
+| Application | Nextcloud |
+| Database | MariaDB 11 |
+| Application Port | 8080 |
+| SSH Port | 22 |
 
-Useful commands:
+The IP address may change when connecting to another network. Check the current address before accessing the server.
 
-    hostnamectl
-    hostname -I
-    free -h
+## 2. Ubuntu Server Configuration
 
-SSH access:
+Ubuntu Server was installed in VirtualBox with 3 virtual CPUs, 2304 MB RAM, and a 25 GB virtual disk. The network adapter was configured in Bridged Mode to allow communication between the Ubuntu VM and Windows host.
 
-    ssh cloudadmin@192.168.1.78
+OpenSSH Server was enabled for remote administration.
 
-Enable SSH service:
+To verify the server information, open the Ubuntu terminal and run:
 
-    sudo systemctl enable --now ssh
+```bash
+hostnamectl
+hostname -I
+free -h
+```
 
-## 4. Docker and Docker Compose
+To connect from Windows PowerShell:
 
-Docker Engine and Docker Compose are used to deploy and manage the Nextcloud and MariaDB containers.
+```powershell
+ssh cloudadmin@192.168.1.78
+```
 
-The application files are stored in:
+If the SSH service is inactive, start it using:
 
-    /opt/nextcloud
+```bash
+sudo systemctl enable --now ssh
+```
 
-A private `.env` file stores the database credentials and VM IP configuration.
+Replace the IP address in the SSH command if the Ubuntu VM receives a new address.
 
-Validate the Compose configuration:
+## 3. Docker and Application Deployment
 
-    docker compose config --quiet
+Docker Engine and Docker Compose were installed on Ubuntu Server to manage the application containers.
 
-Start the application:
+For a fresh installation, follow the official Docker installation instructions:
 
-    docker compose up -d
+https://docs.docker.com/engine/install/ubuntu/
 
-Check the containers:
+Check the installed versions:
 
-    docker compose ps
+```bash
+docker --version
+docker compose version
+```
 
-The main containers are:
+The application files are stored in `/opt/nextcloud`. The `docker-compose.yml` file contains the configuration for the two containers, while the private `.env` file stores database credentials and the VM IP address.
 
-- `nc-app` — Nextcloud application
-- `nc-db` — MariaDB database
+### Start the Application
 
-## 5. Nextcloud and MariaDB
+Open the Ubuntu terminal and run:
 
-Nextcloud is exposed through port **8080**.
+```bash
+cd /opt/nextcloud
+docker compose config --quiet
+docker compose up -d
+docker compose ps
+```
 
-MariaDB uses the internal Docker network and is not directly exposed to the host.
+The system uses two containers:
 
-Nextcloud access:
+| Container | Purpose |
+|---|---|
+| nc-app | Runs the Nextcloud application |
+| nc-db | Runs the MariaDB database |
 
-    http://192.168.1.78:8080
+The Nextcloud application is accessible through the Windows browser at:
 
-The Docker Compose configuration uses persistent volumes:
+http://192.168.1.78:8080
 
-- `nc_data` → `/var/www/html`
-- `db_data` → `/var/lib/mysql`
+MariaDB communicates with Nextcloud through the internal Docker network. Its database port is not published directly to the host.
 
-These volumes preserve application and database data.
+Actual passwords and the `.env` file must be kept private.
 
-Avoid using:
+## 4. Persistent Storage
 
-    docker compose down -v
+Docker volumes are used to store the application and database information.
 
-because the `-v` option removes the persistent volumes.
+| Volume | Purpose |
+|---|---|
+| nc_data | Nextcloud application files |
+| db_data | MariaDB database files |
 
-## 6. Firewall Security
+Check the available volumes:
 
-UFW is configured using a default-deny incoming policy.
+```bash
+docker volume ls
+```
 
-Configure the firewall:
+### Persistence Test
 
-    sudo ufw default deny incoming
-    sudo ufw default allow outgoing
-    sudo ufw allow 22/tcp
-    sudo ufw allow 8080/tcp
-    sudo ufw enable
+The team tested persistent storage by uploading a file named `before-reboot.txt` to Nextcloud and restarting Ubuntu Server.
 
-Check the firewall:
+After the server restarted, the containers were running again, and the uploaded file was still available.
 
-    sudo ufw status verbose
+This confirmed that the uploaded file was retained after a server reboot.
 
-Port 22 is used for SSH access, while port 8080 is used for Nextcloud.
+To repeat the test, upload a file, restart Ubuntu using `sudo reboot`, reconnect to the server, and check that the same file remains in Nextcloud.
 
-## 7. Database Backup Automation
+**Reminder:** Avoid running `docker compose down -v` because it can remove persistent volumes.
 
-The backup script is stored at:
+## 5. Firewall Security
 
-    /opt/nextcloud/automation-script.sh
+The server uses UFW to control incoming connections.
 
-The script creates compressed MariaDB database backups and stores them in:
+The firewall was configured to deny incoming traffic by default while allowing SSH and Nextcloud connections.
 
-    /opt/backups
+### Firewall Configuration
 
-The script uses the database password from the private `.env` file.
+```bash
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+sudo ufw allow 22/tcp
+sudo ufw allow 8080/tcp
+sudo ufw enable
+```
 
-Make the script executable:
+SSH must be allowed before enabling UFW to prevent losing remote access.
 
-    chmod +x /opt/nextcloud/automation-script.sh
+To check the firewall:
 
-The backup file is created using the following naming format:
+```bash
+sudo ufw status verbose
+```
 
-    nextcloud-db-YYYY-MM-DD_HH-MM-SS.sql.gz
+The configured ports are:
 
-Backups older than seven days are automatically removed.
+| Port | Service |
+|---|---|
+| 22 | SSH remote administration |
+| 8080 | Nextcloud web application |
+| 3306 | MariaDB internal database communication |
 
-## 8. Cron Scheduling
+Previous connectivity tests confirmed that SSH and Nextcloud were accessible from Windows. MariaDB port 3306 is configured without an external host port mapping.
 
-Cron is used to run the database backup automatically.
+Docker also manages network rules, so firewall status and Docker port mappings should both be checked when reviewing security.
 
-The scheduled job runs every day at **2:00 AM Philippine time**.
+## 6. Database Backup and Automation
 
-Cron entry:
+A Bash script was created to back up the MariaDB database automatically.
 
-    0 2 * * * /bin/bash /opt/nextcloud/automation-script.sh >> /opt/backups/cron.log 2>&1
+**Script location:** `/opt/nextcloud/automation-script.sh`  
+**Backup directory:** `/opt/backups`
 
-Verify the Cron configuration:
+The script generates compressed SQL backup files, records successful operations, and deletes matching backups older than seven days.
 
-    crontab -l
+### Run the Backup Script
 
-## 9. Maintenance Procedures
+```bash
+bash -n /opt/nextcloud/automation-script.sh
+chmod +x /opt/nextcloud/automation-script.sh
+/opt/nextcloud/automation-script.sh
+```
 
-Start the application:
+Check the backup files and logs:
 
-    cd /opt/nextcloud
-    docker compose up -d
+```bash
+ls -lht /opt/backups | head
+tail -n 5 /opt/backups/backup.log
+```
 
-Check containers:
+### Cron Job Configuration
 
-    docker compose ps
+The backup script is scheduled to run daily at **2:00 AM Philippine time**.
 
-View container logs:
+To configure the schedule:
 
-    docker compose logs
+```bash
+crontab -e
+```
 
-Restart the application:
+Add the following line:
 
-    docker compose restart
+```cron
+0 2 * * * /bin/bash /opt/nextcloud/automation-script.sh >> /opt/backups/cron.log 2>&1
+```
 
-Check firewall status:
+Verify the schedule and service:
 
-    sudo ufw status verbose
+```bash
+crontab -l
+systemctl is-active cron
+timedatectl
+```
 
-Check available disk space:
+The backup script was tested manually and through Cron scheduling. A complete database restoration test has not yet been performed.
 
-    df -h
+## 7. System Maintenance
 
-## 10. Troubleshooting
+The following commands can be used to monitor the system:
 
-### Nextcloud cannot be accessed
+| Task | Command |
+|---|---|
+| Check server IP | `hostname -I` |
+| Check containers | `docker compose ps` |
+| Check disk space | `df -h` |
+| Check volumes | `docker volume ls` |
+| Check firewall | `sudo ufw status verbose` |
+| Check backups | `ls -lh /opt/backups` |
+| Check Cron | `crontab -l` |
+| Check Nextcloud logs | `docker compose logs --tail=50 app` |
 
-Check the VM IP:
+Docker Compose commands should be run from `/opt/nextcloud`.
 
-    hostname -I
+For Ubuntu updates:
 
-Check the containers:
+```bash
+sudo apt update
+sudo apt upgrade
+```
 
-    docker compose ps
+Review system updates before applying changes that may affect the running application.
 
-Check the application logs:
+## 8. Troubleshooting
 
-    docker compose logs app
+| Problem | Solution |
+|---|---|
+| SSH connection fails | Check if the Ubuntu VM is running, verify its IP address, and check the SSH service. |
+| Nextcloud cannot be accessed | Check the containers, server IP, application logs, and port 8080. |
+| Database connection fails | Check the MariaDB container and database configuration. |
+| Backup is not generated | Check the backup script, available storage, and backup logs. |
+| Cron Job is not working | Verify the schedule, Cron service, and Bash script permissions. |
+| IP address changes | Run `hostname -I` and use the updated address. |
+| Storage is nearly full | Check disk usage with `df -h` and review unnecessary files without deleting persistent volumes. |
 
-Verify that port 8080 is allowed:
+## 9. Conclusion
 
-    sudo ufw status verbose
+The CloudNova project uses Ubuntu Server, Docker Compose, Nextcloud, and MariaDB to provide a virtualized file-sharing system.
 
-### MariaDB container is not running
+The application deployment, persistent storage, firewall configuration, and database backup automation were tested during development. These components demonstrate the use of virtualization, Linux server administration, containerization, security, and automation in cloud computing.
 
-Check the database container:
+## 10. References
 
-    docker compose ps
-
-View database logs:
-
-    docker compose logs db
-
-### SSH connection fails
-
-Check the SSH service:
-
-    sudo systemctl status ssh
-
-Check the VM IP:
-
-    hostname -I
-
-Verify that port 22 is allowed:
-
-    sudo ufw status verbose
-
-### Backup is not generated
-
-Check the script:
-
-    ls -lh /opt/nextcloud/automation-script.sh
-
-Run it manually:
-
-    /opt/nextcloud/automation-script.sh
-
-Check the backup directory:
-
-    ls -lh /opt/backups
-
-Check Cron:
-
-    crontab -l
-
-## 11. Data Persistence
-
-Persistent Docker volumes are used to protect application and database data.
-
-The following volumes are required:
-
-- `nc_data`
-- `db_data`
-
-After restarting the Ubuntu Server, start the containers again and verify that previously stored Nextcloud data is still available.
-
-## 12. References
-
-- Docker Documentation — https://docs.docker.com/
-- Nextcloud Administration Manual — https://docs.nextcloud.com/server/latest/admin_manual/
-- Ubuntu Server Documentation — https://documentation.ubuntu.com/server/
-- Oracle VirtualBox Documentation — https://www.virtualbox.org/wiki/Documentation
+1. Docker Documentation. https://docs.docker.com/
+2. Nextcloud Administration Manual. https://docs.nextcloud.com/server/latest/admin_manual/
+3. Ubuntu Server Documentation. https://documentation.ubuntu.com/server/
+4. Oracle VirtualBox Documentation. https://www.virtualbox.org/wiki/Documentation
