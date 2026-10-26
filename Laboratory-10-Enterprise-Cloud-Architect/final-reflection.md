@@ -5,18 +5,18 @@
 
 ## My Final Reflection
 
-Throughout our Cloud Computing laboratory activities, I gained a lot of new knowledge, especially in using Linux, virtual machines, and server configurations. In the beginning, I was still learning how the different tools and processes worked, but as we completed more activities, I became more comfortable with the commands and procedures.
+During our Cloud Computing laboratory activities, I learned many new things, especially about Linux, virtual machines, and server configuration. At first, I was not very familiar with the different tools and procedures we were using. However, as we continued with each activity, I gradually became more confident in using the commands and following the required steps.
 
-For our final activity, Mission 10, we developed a Nextcloud file-sharing system using Ubuntu Server, Docker, and MariaDB. My assigned responsibilities included setting up the Ubuntu Server and assisting Diana with the firewall configuration.
+For our final activity, Mission 10, our group created a Nextcloud file-sharing system using Ubuntu Server, Docker, and MariaDB. My responsibilities focused on setting up the Ubuntu Server and helping Diana with the firewall configuration.
 
-One challenge I encountered was connecting the Ubuntu Server to our Windows laptop. There were instances when the connection was unsuccessful, so we needed to check the IP address, network settings, and SSH connection. Although it was confusing at times, the experience helped me understand server networking better.
+One of the difficulties I experienced was connecting the Ubuntu Server to our Windows laptop. There were times when the connection was not working properly, so we had to check the IP address, network configuration, and SSH connection. Although this was challenging, it helped me gain a better understanding of how server networking works.
 
-I also learned how to configure UFW to protect the server while allowing only the required ports. Before this activity, I did not completely understand the importance of firewall rules, but working on the project showed me how important security is when managing a server.
+I also learned how to use UFW to secure the server and allow only the necessary ports. Before completing this activity, I did not fully understand the purpose of firewall rules. Through this project, I realized how important proper security is when managing and accessing a server.
 
-What I enjoyed most about this activity was seeing the actual result of our work. We were able to open Nextcloud through the browser, upload files, and verify that the data remained available after restarting Ubuntu. Seeing the system work successfully made me appreciate our group’s effort.
+The part I enjoyed most was being able to see the actual output of our work. We successfully accessed Nextcloud through the browser, uploaded files, and checked whether the data was still available after restarting Ubuntu. Seeing the system function properly made me appreciate the effort and teamwork that our group put into the project.
 
-This activity also taught me the value of patience and teamwork. Each member had different responsibilities, but we still had to support one another because all parts of the system were connected.
+This activity also taught me that patience and cooperation are important when working on a technical project. Although each member had different responsibilities, we still needed to help and communicate with one another because every part of the system was connected.
 
-Overall, Missions 1 to 10 helped me develop more knowledge and confidence in cloud computing technologies. I still have many things to learn, but these activities gave me a better understanding of how servers, applications, security, and automation work together.
+Overall, Missions 1 to 10 helped me improve my knowledge and confidence in cloud computing. I know that there are still many things I need to learn, but these laboratory activities helped me understand better how servers, applications, security, and automation work together.
 
-I am glad that we were able to apply what we learned by creating a functional project, even though we experienced several challenges along the way.
+I am thankful that we were able to apply the knowledge we gained by building a functional project. Even though we encountered some problems along the way, overcoming those challenges made the experience more meaningful and helped me learn from the process.
